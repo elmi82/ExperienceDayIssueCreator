@@ -1,5 +1,7 @@
 package edic.controller;
 
+import java.net.URL;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +38,18 @@ public class IssueController {
 		HttpEntity<Issue> request = new HttpEntity<Issue>(issue, headers);
 		RestTemplate restTemplate = new RestTemplate();
 
-		String url = "https://api.github.com/repos/elmi82/ExperienceDayIssueCreator/issues";
-		ResponseEntity<Issue> response = restTemplate.exchange(url,
-				HttpMethod.POST, request, Issue.class);
-		Issue resultingIssue = response.getBody();
+		try {
+			URL url = githubConfiguration.getEndpointURL("issuess");
+			ResponseEntity<Issue> response = restTemplate.exchange(url.toString(),
+					HttpMethod.POST, request, Issue.class);
+			Issue resultingIssue = response.getBody();
 
-		model.addAttribute("issue", resultingIssue);
-		return "result";
+			model.addAttribute("issue", resultingIssue);
+			return "result";
+		} catch (Exception e) {
+			log.error("Endpoint for issues was not defined in application configuration");
+			return "error";
+		}
     }
 
 	private HttpHeaders getAuthorizationHeaders() {
