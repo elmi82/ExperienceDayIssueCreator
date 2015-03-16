@@ -33,6 +33,8 @@ public class IssueController {
 	private static final Logger log = LoggerFactory
 			.getLogger(IssueController.class);
 
+	private static final RestTemplate restTemplate = new RestTemplate();
+
 	@Autowired
 	private GithubConfiguration githubConfiguration;
 
@@ -47,11 +49,10 @@ public class IssueController {
 			throws InvalidConfigurationException {
 		HttpHeaders headers = getAuthorizationHeaders();
 		HttpEntity<Issue> request = new HttpEntity<Issue>(issue, headers);
-		RestTemplate restTemplate = new RestTemplate();
 
-		URL url = githubConfiguration.getEndpointURL("issuess");
+		URL url = githubConfiguration.getEndpointURL("issues");
 		ResponseEntity<Issue> response = restTemplate.exchange(url.toString(),
-				HttpMethod.POST, request, Issue.class);
+												HttpMethod.POST, request, Issue.class);
 		Issue resultingIssue = response.getBody();
 
 		model.addAttribute("issue", resultingIssue);
@@ -64,8 +65,8 @@ public class IssueController {
 		return headers;
 	}
 
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Application is not properly configured")
-	// 500
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, // 500
+			reason = "Application is not properly configured")
 	@ExceptionHandler(InvalidConfigurationException.class)
 	public ModelAndView internalServerError(HttpServletRequest request,
 			Exception exception) throws Exception {
