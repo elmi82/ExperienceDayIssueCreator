@@ -2,12 +2,14 @@ package edic.controller;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +41,17 @@ public class IssueController {
 	private GithubConfiguration githubConfiguration;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String greetingForm(Model model) {
+	public String greetingForm(Model model) throws InvalidConfigurationException {
+		HttpHeaders headers = getAuthorizationHeaders();
+		HttpEntity<Issue> request = new HttpEntity<Issue>(headers);
+
+		URL url = githubConfiguration.getEndpointURL("issues");
+		ParameterizedTypeReference<Set<Issue>> responseType = new ParameterizedTypeReference<Set<Issue>>() {};
+		ResponseEntity<Set<Issue>> response = restTemplate.exchange(url.toString(),
+												HttpMethod.GET, request, responseType);
+		Set<Issue> issueList = response.getBody();
+
+		model.addAttribute("issueList", issueList);
 		model.addAttribute("issue", new Issue());
 		return "issues";
 	}
