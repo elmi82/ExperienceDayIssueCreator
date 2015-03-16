@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
 import edic.configuration.GithubConfiguration;
+import edic.exception.InvalidConfigurationException;
 import edic.model.Issue;
 
 @Controller
@@ -33,23 +34,19 @@ public class IssueController {
     }
 
     @RequestMapping(value="/issue", method=RequestMethod.POST)
-	public String greetingSubmit(@ModelAttribute Issue issue, Model model) {
+	public String greetingSubmit(@ModelAttribute Issue issue, Model model)
+			throws InvalidConfigurationException {
 		HttpHeaders headers = getAuthorizationHeaders();
 		HttpEntity<Issue> request = new HttpEntity<Issue>(issue, headers);
 		RestTemplate restTemplate = new RestTemplate();
 
-		try {
-			URL url = githubConfiguration.getEndpointURL("issuess");
-			ResponseEntity<Issue> response = restTemplate.exchange(url.toString(),
-					HttpMethod.POST, request, Issue.class);
-			Issue resultingIssue = response.getBody();
+		URL url = githubConfiguration.getEndpointURL("issuess");
+		ResponseEntity<Issue> response = restTemplate.exchange(url.toString(),
+				HttpMethod.POST, request, Issue.class);
+		Issue resultingIssue = response.getBody();
 
-			model.addAttribute("issue", resultingIssue);
-			return "result";
-		} catch (Exception e) {
-			log.error("Endpoint for issues was not defined in application configuration");
-			return "error";
-		}
+		model.addAttribute("issue", resultingIssue);
+		return "result";
     }
 
 	private HttpHeaders getAuthorizationHeaders() {
@@ -58,4 +55,6 @@ public class IssueController {
 				"Token " + githubConfiguration.getToken());
 		return headers;
 	}
+
+
 }
