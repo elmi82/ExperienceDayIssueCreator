@@ -23,11 +23,23 @@
 	</nav>
 
 	<div class="container">
-		<h1>Result</h1>
-    	<p th:text="'title: ' + ${issue.title}" />
-    	<p th:text="'body: ' + ${issue.body}" />
-    	<a href="/">Create another issue</a>
-	</div>
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h3>Your Issue has been created</h3>
+			</div><!-- /.panel-heading -->
+			<div class="panel-body">
+				<dl>
+					<dt>Title:</dt>
+					<dd th:text="${issue.title}"></dd>
+					<dt>Body:</dt>
+					<dd th:text="${issue.body}"></dd>
+				</dl>
+			</div><!-- /.panel-body -->
+			<div class="panel-footer">
+				<a class="btn btn-primary" href="/">Create another issue</a>
+			</div><!-- /.panel-footer -->
+		</div><!-- /.panel -->
+	</div><!-- /.container -->
 
 	<!-- JQuery -->
 	<script th:src="@{/webjars/jquery/2.1.3/jquery.min.js}"
