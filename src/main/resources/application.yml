@@ -1,0 +1,6 @@
+---
+github:
+  base-url: "https://api.github.com/repos/elmi82/ExperienceDayIssueCreator"
+  token: "45a8e3de4036d202e3b97f33a6203b290cf32466"
+  endpoints:
+    issues: "/issues"
