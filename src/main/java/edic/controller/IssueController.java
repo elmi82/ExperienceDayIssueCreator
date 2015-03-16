@@ -30,18 +30,19 @@ import edic.model.Issue;
 
 @Controller
 public class IssueController {
-	private static final Logger log = LoggerFactory.getLogger(IssueController.class);
+	private static final Logger log = LoggerFactory
+			.getLogger(IssueController.class);
 
 	@Autowired
 	private GithubConfiguration githubConfiguration;
 
-    @RequestMapping(value="/", method=RequestMethod.GET)
-    public String greetingForm(Model model) {
-        model.addAttribute("issue", new Issue());
-        return "issues";
-    }
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String greetingForm(Model model) {
+		model.addAttribute("issue", new Issue());
+		return "issues";
+	}
 
-    @RequestMapping(value="/issue", method=RequestMethod.POST)
+	@RequestMapping(value = "/issue", method = RequestMethod.POST)
 	public String greetingSubmit(@ModelAttribute Issue issue, Model model)
 			throws InvalidConfigurationException {
 		HttpHeaders headers = getAuthorizationHeaders();
@@ -55,18 +56,19 @@ public class IssueController {
 
 		model.addAttribute("issue", resultingIssue);
 		return "result";
-    }
+	}
 
 	private HttpHeaders getAuthorizationHeaders() {
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization",
-				"Token " + githubConfiguration.getToken());
+		headers.add("Authorization", "Token " + githubConfiguration.getToken());
 		return headers;
 	}
 
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Application is not properly configured")// 500
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Application is not properly configured")
+	// 500
 	@ExceptionHandler(InvalidConfigurationException.class)
-	public ModelAndView internalServerError(HttpServletRequest request, Exception exception) throws Exception {
+	public ModelAndView internalServerError(HttpServletRequest request,
+			Exception exception) throws Exception {
 		if (AnnotationUtils.findAnnotation(exception.getClass(),
 				ResponseStatus.class) != null)
 			throw exception;
