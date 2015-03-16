@@ -33,6 +33,22 @@
 					data-target="#createIssueModal">Create new issue</a>
 			</p>
 		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-headgin">
+				<h3>Current issues</h3>
+			</div>
+			<table class="table">
+				<tr>
+					<th>Title</th>
+					<th>Body</th>
+				</tr>
+				<tr th:each="issue: ${issueList}">
+					<td th:text="${issue.getTitle()}"></td>
+					<td th:text="${issue.getBody()}"></td>
+				</tr>
+			</table>
+		</div>
 	</div>
 
 	<div class="modal fade" id="createIssueModal">
