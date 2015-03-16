@@ -32,12 +32,12 @@
 					data-toggle="modal"
 					data-target="#createIssueModal">Create new issue</a>
 			</p>
-		</div>
+		</div><!-- /.jumbotron -->
 
-		<div class="panel panel-default">
-			<div class="panel-headgin">
+		<div th:if="${issueList}" class="panel panel-default">
+			<div class="panel-heading">
 				<h3>Current issues</h3>
-			</div>
+			</div><!-- /.panel-heading -->
 			<table class="table">
 				<tr>
 					<th>Title</th>
@@ -48,8 +48,8 @@
 					<td th:text="${issue.getBody()}"></td>
 				</tr>
 			</table>
-		</div>
-	</div>
+		</div><!-- /.panel -->
+	</div><!-- /.container -->
 
 	<div class="modal fade" id="createIssueModal">
 		<div class="modal-dialog">
