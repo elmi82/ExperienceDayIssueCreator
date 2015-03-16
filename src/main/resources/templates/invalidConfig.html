@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<title>GitHub Issues created</title>
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet"
+		th:ref="@{/webjars/bootstrap/3.3.2/css/bootstrap.min.css}"
+		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#"> Experience Day </a>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div class="panel panel-danger">
+			<div class="panel-heading">
+				<h3 th:text="${status}+' ('+${error}+')'">status-code: error</h3>
+			</div>
+			<div class="panel-body">
+				<div
+					th:if="${ex} or ${exception} or (${message} and ${message.length() != 0})">
+					<b>Cause:</b> <span th:if="${ex}" th:text="${ex}">exception
+						...</span> <span th:if="${exception}" th:text="${exception}">exception
+						...</span> <span th:if="${message} and ${message.length() != 0}"
+						th:text="${message}">message ...</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- JQuery -->
+	<script th:src="@{/webjars/jquery/2.1.3/jquery.min.js}"
+		src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<!-- Bootstrap -->
+	<script th:src="@{/webjars/bootstrap/3.3.2/js/bootstrap.min.js}"
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

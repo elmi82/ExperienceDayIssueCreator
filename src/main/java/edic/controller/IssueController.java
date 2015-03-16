@@ -1,20 +1,28 @@
 package edic.controller;
 
 import java.net.URL;
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
 import edic.configuration.GithubConfiguration;
 import edic.exception.InvalidConfigurationException;
@@ -56,5 +64,22 @@ public class IssueController {
 		return headers;
 	}
 
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "Application is not properly configured")// 500
+	@ExceptionHandler(InvalidConfigurationException.class)
+	public ModelAndView internalServerError(HttpServletRequest request, Exception exception) throws Exception {
+		if (AnnotationUtils.findAnnotation(exception.getClass(),
+				ResponseStatus.class) != null)
+			throw exception;
 
+		log.error("Endpoint for issues was not defined in application configuration");
+
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("exception", exception);
+		mav.addObject("url", request.getRequestURL());
+		mav.addObject("timestamp", new Date().toString());
+		mav.addObject("status", 500);
+		mav.setViewName("invalidConfig");
+
+		return mav;
+	}
 }
