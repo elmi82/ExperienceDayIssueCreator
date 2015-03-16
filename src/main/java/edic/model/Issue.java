@@ -1,5 +1,8 @@
 package edic.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Issue {
 	private String title;
 	private String body;
